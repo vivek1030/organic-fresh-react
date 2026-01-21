@@ -13,7 +13,10 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/signin', { state: { from: location.pathname }, replace: true });
+      navigate('/signin', {
+        state: { from: location.pathname },
+        replace: true,
+      });
     }
   }, [isAuthenticated, navigate, location]);
 

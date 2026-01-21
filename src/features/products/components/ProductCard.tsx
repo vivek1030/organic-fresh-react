@@ -30,7 +30,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             loading="lazy"
           />
         </Link>
-        
+
         <div className="absolute left-2 top-2 md:left-4 md:top-4 flex flex-col gap-1.5 md:gap-2">
           {product.isNew && (
             <span className="rounded-full bg-green-600 px-2 py-0.5 md:px-3 md:py-1 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white shadow-lg">
@@ -51,7 +51,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         <div className="absolute inset-x-2 bottom-2 md:inset-x-4 md:bottom-4 md:translate-y-12 md:opacity-0 transition-all duration-300 md:group-hover:translate-y-0 md:group-hover:opacity-100">
-          <button 
+          <button
             onClick={(e) => {
               e.preventDefault();
               addItem(product);
@@ -67,11 +67,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       <div className="flex flex-1 flex-col p-3 md:p-5">
         <div className="mb-1.5 md:mb-2">
-          <span className={`rounded-lg px-1.5 py-0.5 md:px-2 md:py-1 text-[8px] md:text-[10px] font-black uppercase tracking-wider ${getCategoryStyles(product.category)}`}>
+          <span
+            className={`rounded-lg px-1.5 py-0.5 md:px-2 md:py-1 text-[8px] md:text-[10px] font-black uppercase tracking-wider ${getCategoryStyles(product.category)}`}
+          >
             {product.category.replace(/-/g, ' ')}
           </span>
         </div>
-        
+
         <Link to={`/product/${product.id}`} className="flex-1">
           <h3 className="mb-1 md:mb-2 text-sm md:text-lg font-bold text-stone-900 transition-colors hover:text-green-600 line-clamp-1">
             {product.name}
@@ -89,10 +91,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               ${product.price.toFixed(2)}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-0.5 md:gap-1 text-amber-400 mb-0.5">
             <StarIcon fill="currentColor" />
-            <span className="text-[10px] md:text-xs font-bold text-stone-400">4.5</span>
+            <span className="text-[10px] md:text-xs font-bold text-stone-400">
+              4.5
+            </span>
           </div>
         </div>
       </div>
@@ -100,7 +104,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   );
 };
 
-const StarIcon = ({ fill = "none" }: { fill?: string }) => (
+const StarIcon = ({ fill = 'none' }: { fill?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="14"

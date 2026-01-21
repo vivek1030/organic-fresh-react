@@ -4,16 +4,52 @@ import { MainLayout } from './layouts/MainLayout';
 import { AuthGuard } from './features/auth/components/AuthGuard';
 
 // Lazy load page components
-const HomePage = lazy(() => import('./pages/HomePage').then(module => ({ default: module.HomePage })));
-const ShopPage = lazy(() => import('./pages/ShopPage').then(module => ({ default: module.ShopPage })));
-const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage').then(module => ({ default: module.ProductDetailsPage })));
-const CategoryPage = lazy(() => import('./pages/CategoryPage').then(module => ({ default: module.CategoryPage })));
-const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage').then(module => ({ default: module.SearchResultsPage })));
-const SignInPage = lazy(() => import('./pages/SignInPage').then(module => ({ default: module.SignInPage })));
-const SignUpPage = lazy(() => import('./pages/SignUpPage').then(module => ({ default: module.SignUpPage })));
-const CheckoutPage = lazy(() => import('./pages/CheckoutPage').then(module => ({ default: module.CheckoutPage })));
-const OrderHistoryPage = lazy(() => import('./pages/OrderHistoryPage').then(module => ({ default: module.OrderHistoryPage })));
-const TrackOrderPage = lazy(() => import('./pages/TrackOrderPage').then(module => ({ default: module.TrackOrderPage })));
+const HomePage = lazy(() =>
+  import('./pages/HomePage').then((module) => ({ default: module.HomePage }))
+);
+const ShopPage = lazy(() =>
+  import('./pages/ShopPage').then((module) => ({ default: module.ShopPage }))
+);
+const ProductDetailsPage = lazy(() =>
+  import('./pages/ProductDetailsPage').then((module) => ({
+    default: module.ProductDetailsPage,
+  }))
+);
+const CategoryPage = lazy(() =>
+  import('./pages/CategoryPage').then((module) => ({
+    default: module.CategoryPage,
+  }))
+);
+const SearchResultsPage = lazy(() =>
+  import('./pages/SearchResultsPage').then((module) => ({
+    default: module.SearchResultsPage,
+  }))
+);
+const SignInPage = lazy(() =>
+  import('./pages/SignInPage').then((module) => ({
+    default: module.SignInPage,
+  }))
+);
+const SignUpPage = lazy(() =>
+  import('./pages/SignUpPage').then((module) => ({
+    default: module.SignUpPage,
+  }))
+);
+const CheckoutPage = lazy(() =>
+  import('./pages/CheckoutPage').then((module) => ({
+    default: module.CheckoutPage,
+  }))
+);
+const OrderHistoryPage = lazy(() =>
+  import('./pages/OrderHistoryPage').then((module) => ({
+    default: module.OrderHistoryPage,
+  }))
+);
+const TrackOrderPage = lazy(() =>
+  import('./pages/TrackOrderPage').then((module) => ({
+    default: module.TrackOrderPage,
+  }))
+);
 
 const Layout = () => {
   return (

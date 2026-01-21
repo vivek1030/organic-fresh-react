@@ -19,7 +19,11 @@ export const authService = {
     });
   },
 
-  signUp: async (name: string, email: string, password: string): Promise<User> => {
+  signUp: async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<User> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (password.length >= 6) {

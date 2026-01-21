@@ -6,11 +6,11 @@ This is an **E-commerce Frontend** application built using **React**, **Vite**, 
 
 ## 🚀 Tech Stack
 
-* **React**
-* **Vite**
-* **TypeScript**
-* **Node.js (Minimum v20 required)**
-* **npm**
+- **React**
+- **Vite**
+- **TypeScript**
+- **Node.js (Minimum v20 required)**
+- **npm**
 
 ---
 
@@ -18,8 +18,8 @@ This is an **E-commerce Frontend** application built using **React**, **Vite**, 
 
 Before installing the project, make sure you have the following installed on your system:
 
-* **Node.js v20 or higher**
-* **npm** (comes with Node.js)
+- **Node.js v20 or higher**
+- **npm** (comes with Node.js)
 
 You can verify your Node.js version by running:
 
@@ -88,4 +88,3 @@ npm run preview
 This project serves as the **frontend for an e-commerce application**, focusing on performance, scalability, and modern UI development practices.
 
 ---
-

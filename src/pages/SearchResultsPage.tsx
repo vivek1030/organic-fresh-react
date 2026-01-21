@@ -18,7 +18,7 @@ export const SearchResultsPage: React.FC = () => {
         setLoading(false);
         return;
       }
-      
+
       setLoading(true);
       try {
         const results = await productService.searchProducts(query);
@@ -45,9 +45,11 @@ export const SearchResultsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-stone-900 mb-2">Search Results</h1>
+        <h1 className="text-3xl font-bold text-stone-900 mb-2">
+          Search Results
+        </h1>
         <p className="text-stone-500">
-          {products.length > 0 
+          {products.length > 0
             ? `Found ${products.length} results for "${query}"`
             : `No results found for "${query}"`}
         </p>
@@ -64,10 +66,12 @@ export const SearchResultsPage: React.FC = () => {
           <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-stone-50 text-stone-300 mb-6">
             <Search size={40} />
           </div>
-          <h2 className="text-2xl font-bold text-stone-900 mb-2">No matches found</h2>
+          <h2 className="text-2xl font-bold text-stone-900 mb-2">
+            No matches found
+          </h2>
           <p className="text-stone-500 max-w-md mx-auto">
-            We couldn't find any products matching "{query}". 
-            Try checking your spelling or using more general terms.
+            We couldn't find any products matching "{query}". Try checking your
+            spelling or using more general terms.
           </p>
         </div>
       )}

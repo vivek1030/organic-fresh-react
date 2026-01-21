@@ -11,7 +11,7 @@ export const SignUpPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const navigate = useNavigate();
   const setUser = useAuthStore((state) => state.setUser);
 
@@ -19,13 +19,13 @@ export const SignUpPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const user = await authService.signUp(name, email, password);
       setUser(user);
       navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Registration failed');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,9 @@ export const SignUpPage: React.FC = () => {
             <UserPlus size={24} />
           </div>
           <h1 className="text-2xl font-bold text-stone-900">Create Account</h1>
-          <p className="text-stone-500 mt-2">Join our organic community today</p>
+          <p className="text-stone-500 mt-2">
+            Join our organic community today
+          </p>
         </div>
 
         {error && (
@@ -50,11 +52,17 @@ export const SignUpPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-stone-700" htmlFor="name">
+            <label
+              className="text-sm font-medium text-stone-700"
+              htmlFor="name"
+            >
               Full Name
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+              <User
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
+                size={18}
+              />
               <input
                 id="name"
                 type="text"
@@ -68,11 +76,17 @@ export const SignUpPage: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-stone-700" htmlFor="email">
+            <label
+              className="text-sm font-medium text-stone-700"
+              htmlFor="email"
+            >
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+              <Mail
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
+                size={18}
+              />
               <input
                 id="email"
                 type="email"
@@ -86,11 +100,17 @@ export const SignUpPage: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-stone-700" htmlFor="password">
+            <label
+              className="text-sm font-medium text-stone-700"
+              htmlFor="password"
+            >
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
+              <Lock
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
+                size={18}
+              />
               <input
                 id="password"
                 type="password"
@@ -101,7 +121,9 @@ export const SignUpPage: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <p className="text-[10px] text-stone-400 mt-1 pl-1">Must be at least 6 characters</p>
+            <p className="text-[10px] text-stone-400 mt-1 pl-1">
+              Must be at least 6 characters
+            </p>
           </div>
 
           <Button type="submit" className="w-full py-6" disabled={loading}>
@@ -112,7 +134,10 @@ export const SignUpPage: React.FC = () => {
         <div className="mt-8 text-center text-stone-600">
           <p>
             Already have an account?{' '}
-            <Link to="/signin" className="text-green-600 font-bold hover:underline">
+            <Link
+              to="/signin"
+              className="text-green-600 font-bold hover:underline"
+            >
               Sign In
             </Link>
           </p>

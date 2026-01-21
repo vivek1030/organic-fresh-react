@@ -2,10 +2,32 @@ import type { ProductSummary, ProductDetails } from '../../../types/product';
 
 const BASE_URL = 'https://dummyjson.com/products';
 
-const mapToSummary = (product: any): ProductSummary => {
+interface RawProduct {
+  id: number;
+  title: string;
+  price: number;
+  discountPercentage: number;
+  thumbnail: string;
+  category: string;
+  rating: number;
+  description: string;
+  images: string[];
+  sku: string;
+  weight: number;
+}
+
+interface RawCategory {
+  slug: string;
+  name: string;
+  url: string;
+}
+
+const mapToSummary = (product: RawProduct): ProductSummary => {
   const discount = product.discountPercentage;
   const price = product.price;
-  const originalPrice = discount ? parseFloat((price / (1 - discount / 100)).toFixed(2)) : undefined;
+  const originalPrice = discount
+    ? parseFloat((price / (1 - discount / 100)).toFixed(2))
+    : undefined;
 
   return {
     id: product.id,
@@ -19,7 +41,7 @@ const mapToSummary = (product: any): ProductSummary => {
   };
 };
 
-const mapToDetails = (product: any): ProductDetails => {
+const mapToDetails = (product: RawProduct): ProductDetails => {
   const summary = mapToSummary(product);
   return {
     ...summary,
@@ -31,7 +53,12 @@ const mapToDetails = (product: any): ProductDetails => {
 };
 
 export const productService = {
-  getAllProducts: async (limit = 100, skip = 0, sortBy = '', order = ''): Promise<ProductSummary[]> => {
+  getAllProducts: async (
+    limit = 100,
+    skip = 0,
+    sortBy = '',
+    order = ''
+  ): Promise<ProductSummary[]> => {
     let url = `${BASE_URL}?limit=${limit}&skip=${skip}`;
     if (sortBy) url += `&sortBy=${sortBy}&order=${order}`;
     const response = await fetch(url);
@@ -51,7 +78,13 @@ export const productService = {
     }
   },
 
-  getProductsByCategory: async (category: string, limit = 10, skip = 0, sortBy = '', order = ''): Promise<ProductSummary[]> => {
+  getProductsByCategory: async (
+    category: string,
+    limit = 10,
+    skip = 0,
+    sortBy = '',
+    order = ''
+  ): Promise<ProductSummary[]> => {
     let url = `${BASE_URL}/category/${category}?limit=${limit}&skip=${skip}`;
     if (sortBy) url += `&sortBy=${sortBy}&order=${order}`;
     const response = await fetch(url);
@@ -62,14 +95,16 @@ export const productService = {
   getAllCategories: async (): Promise<string[]> => {
     const response = await fetch(`${BASE_URL}/categories`);
     const data = await response.json();
-    if (Array.isArray(data) && typeof data[0] === 'object') {
-      return data.map((c: any) => c.slug);
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object') {
+      return data.map((c: RawCategory) => c.slug);
     }
     return data;
   },
 
   searchProducts: async (query: string): Promise<ProductSummary[]> => {
-    const response = await fetch(`${BASE_URL}/search?q=${encodeURIComponent(query)}`);
+    const response = await fetch(
+      `${BASE_URL}/search?q=${encodeURIComponent(query)}`
+    );
     const data = await response.json();
     return data.products.map(mapToSummary);
   },

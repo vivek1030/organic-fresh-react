@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { ProductCard } from '../features/products/components/ProductCard';
@@ -13,7 +13,7 @@ export const CategoryPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  
+
   const sortBy = searchParams.get('sortBy') || '';
   const order = searchParams.get('order') || '';
   const ITEMS_PER_PAGE = 10;
@@ -24,7 +24,13 @@ export const CategoryPage: React.FC = () => {
       setLoading(true);
       try {
         const [productsData, categoriesData] = await Promise.all([
-          productService.getProductsByCategory(category, ITEMS_PER_PAGE, 0, sortBy, order),
+          productService.getProductsByCategory(
+            category,
+            ITEMS_PER_PAGE,
+            0,
+            sortBy,
+            order
+          ),
           productService.getAllCategories(),
         ]);
         setProducts(productsData);
@@ -40,6 +46,26 @@ export const CategoryPage: React.FC = () => {
     fetchInitialData();
   }, [category, sortBy, order]);
 
+  const loadMore = useCallback(async () => {
+    if (!category || loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    try {
+      const moreProducts = await productService.getProductsByCategory(
+        category,
+        ITEMS_PER_PAGE,
+        products.length,
+        sortBy,
+        order
+      );
+      setProducts((prev) => [...prev, ...moreProducts]);
+      setHasMore(moreProducts.length === ITEMS_PER_PAGE);
+    } catch (error) {
+      console.error('Failed to load more products:', error);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [category, loadingMore, hasMore, products.length, sortBy, order]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -54,27 +80,7 @@ export const CategoryPage: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadingMore, hasMore, products.length, category, sortBy, order]);
-
-  const loadMore = async () => {
-    if (!category || loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    try {
-      const moreProducts = await productService.getProductsByCategory(
-        category, 
-        ITEMS_PER_PAGE, 
-        products.length,
-        sortBy,
-        order
-      );
-      setProducts((prev) => [...prev, ...moreProducts]);
-      setHasMore(moreProducts.length === ITEMS_PER_PAGE);
-    } catch (error) {
-      console.error('Failed to load more products:', error);
-    } finally {
-      setLoadingMore(false);
-    }
-  };
+  }, [loadMore, loadingMore, hasMore]);
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -114,27 +120,34 @@ export const CategoryPage: React.FC = () => {
       {/* Category Hero Section */}
       <section className="relative h-[250px] md:h-[350px] flex items-center overflow-hidden bg-stone-900 text-white">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2000&auto=format&fit=crop" 
-            alt={category} 
+          <img
+            src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2000&auto=format&fit=crop"
+            alt={category}
             className="w-full h-full object-cover opacity-40 mix-blend-overlay"
           />
         </div>
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-2xl">
             <nav className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-green-500 mb-6">
-              <Link to="/" className="hover:text-white transition-colors">Home</Link>
+              <Link to="/" className="hover:text-white transition-colors">
+                Home
+              </Link>
               <span>/</span>
-              <Link to="/shop" className="hover:text-white transition-colors">Shop</Link>
+              <Link to="/shop" className="hover:text-white transition-colors">
+                Shop
+              </Link>
               <span>/</span>
-              <span className="text-white capitalize">{category?.replace(/-/g, ' ')}</span>
+              <span className="text-white capitalize">
+                {category?.replace(/-/g, ' ')}
+              </span>
             </nav>
             <h1 className="text-5xl md:text-7xl font-black leading-[0.8] mb-6 capitalize">
               {category?.replace(/-/g, ' ')} <br />
               <span className="text-green-500 italic font-serif">Harvest</span>
             </h1>
             <p className="text-lg text-stone-300 font-medium max-w-md leading-relaxed">
-              Explore our hand-picked selection of premium organic {category?.replace(/-/g, ' ')} delivered fresh to your door.
+              Explore our hand-picked selection of premium organic{' '}
+              {category?.replace(/-/g, ' ')} delivered fresh to your door.
             </p>
           </div>
         </div>
@@ -208,10 +221,17 @@ export const CategoryPage: React.FC = () => {
               </div>
 
               {/* Back to Shop Widget */}
-              <Link to="/shop" className="group block rounded-[2.5rem] bg-stone-100 p-8 border border-stone-200 transition-all hover:bg-stone-900 hover:text-white">
-                <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 group-hover:text-green-500 mb-2 block">Navigation</span>
+              <Link
+                to="/shop"
+                className="group block rounded-[2.5rem] bg-stone-100 p-8 border border-stone-200 transition-all hover:bg-stone-900 hover:text-white"
+              >
+                <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 group-hover:text-green-500 mb-2 block">
+                  Navigation
+                </span>
                 <h3 className="text-xl font-black mb-2">Back to Full Shop</h3>
-                <p className="text-xs font-bold opacity-60 mb-0">Browse all 100+ premium organic products.</p>
+                <p className="text-xs font-bold opacity-60 mb-0">
+                  Browse all 100+ premium organic products.
+                </p>
               </Link>
             </div>
           </aside>
@@ -230,7 +250,7 @@ export const CategoryPage: React.FC = () => {
 
               <div className="relative group min-w-[200px]">
                 <div className="absolute inset-0 bg-green-600/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <select 
+                <select
                   onChange={handleSortChange}
                   value={getCurrentSortValue()}
                   className="relative w-full bg-white border-2 border-stone-100 rounded-2xl px-6 py-4 text-xs font-black uppercase tracking-widest text-stone-900 focus:outline-none focus:border-green-600 focus:ring-4 focus:ring-green-600/5 shadow-sm appearance-none cursor-pointer pr-12 transition-all hover:border-stone-200"
@@ -241,7 +261,19 @@ export const CategoryPage: React.FC = () => {
                   <option>Price: High to Low</option>
                 </select>
                 <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -249,12 +281,33 @@ export const CategoryPage: React.FC = () => {
             {products.length === 0 ? (
               <div className="py-32 text-center bg-white rounded-[3rem] border border-stone-100 border-dashed">
                 <div className="h-20 w-20 rounded-full bg-stone-50 flex items-center justify-center mx-auto mb-6 text-stone-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="m15 9-6 6" />
+                    <path d="m9 9 6 6" />
+                  </svg>
                 </div>
-                <h3 className="text-2xl font-black text-stone-900 mb-2">No results yet</h3>
-                <p className="text-stone-500 font-medium mb-8">We're currently restocking our {category?.replace(/-/g, ' ')} aisle.</p>
+                <h3 className="text-2xl font-black text-stone-900 mb-2">
+                  No results yet
+                </h3>
+                <p className="text-stone-500 font-medium mb-8">
+                  We're currently restocking our {category?.replace(/-/g, ' ')}{' '}
+                  aisle.
+                </p>
                 <Link to="/shop">
-                  <Button className="px-10 py-6 font-black rounded-2xl shadow-xl shadow-green-100">Browse All Items</Button>
+                  <Button className="px-10 py-6 font-black rounded-2xl shadow-xl shadow-green-100">
+                    Browse All Items
+                  </Button>
                 </Link>
               </div>
             ) : (
@@ -268,7 +321,9 @@ export const CategoryPage: React.FC = () => {
                 {loadingMore && (
                   <div className="py-20 text-center">
                     <div className="inline-flex h-12 w-12 animate-spin rounded-full border-[3px] border-solid border-green-600 border-r-transparent" />
-                    <p className="mt-4 text-xs font-black uppercase tracking-[0.3em] text-stone-400">Loading More Items</p>
+                    <p className="mt-4 text-xs font-black uppercase tracking-[0.3em] text-stone-400">
+                      Loading More Items
+                    </p>
                   </div>
                 )}
               </>
@@ -279,4 +334,3 @@ export const CategoryPage: React.FC = () => {
     </div>
   );
 };
-
